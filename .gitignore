@@ -1,0 +1,21 @@
+# Local credentials and environment files
+.env
+.env.*
+!.env.example
+.dev.vars
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+
+# Build and editor artifacts
+build/
+dist/
+.pio/
+.vscode/
+.idea/
+*.log
+*.swp
+*~
