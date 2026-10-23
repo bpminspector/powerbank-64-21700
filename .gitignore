@@ -13,6 +13,9 @@ service-account*.json
 # Build and editor artifacts
 build/
 dist/
+sdkconfig
+sdkconfig.old
+managed_components/
 .pio/
 .vscode/
 .idea/

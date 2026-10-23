@@ -1,0 +1,2 @@
+dependencies:
+  espressif/esp_lcd_gc9107: "==2.0.0"
