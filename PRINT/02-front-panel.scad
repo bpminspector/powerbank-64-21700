@@ -78,6 +78,7 @@ module panel_body() {
                 }
 
         // Optional microphone grille. Omit/fill these holes if the mic is elsewhere.
+        /*
         for (x = [-7, -3.5, 0, 3.5, 7])
             translate([x, cy_from_top(184), -0.2]) cylinder(d=1.3, h=panel_t+0.4, $fn=24);
 
@@ -93,6 +94,7 @@ module panel_body() {
                     linear_extrude(height=0.5) text(labels[i], size=2.2, font="Liberation Sans:style=Bold");
             }
         }
+        */
     }
 }
 

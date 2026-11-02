@@ -1,2 +1,2 @@
 dependencies:
-  espressif/esp_lcd_gc9107: "==2.0.0"
+  esp-idf-lib/dht: "^1.2.0"

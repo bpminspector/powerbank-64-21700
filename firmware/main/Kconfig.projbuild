@@ -1,37 +1,4 @@
-menu "PowerBank64 node"
-
-config PB_NODE_ID
-    int "Application node ID"
-    range 1 65535
-    default 404
-    help
-        16-bit identity used by PowerBank and the ESP-NOW telemetry protocol.
-
-config PB_WIFI_SSID
-    string "Wi-Fi SSID (local sdkconfig only)"
-    default ""
-
-config PB_WIFI_PASSWORD
-    string "Wi-Fi password (local sdkconfig only)"
-    default ""
-
-config PB_WIFI_CHANNEL
-    int "ESP-NOW channel when not associated with an AP"
-    range 1 13
-    default 6
-
-config PB_ESPNOW_PEER_MAC
-    string "ESP-NOW peer MAC (empty disables ESP-NOW TX)"
-    default ""
-    help
-        Format: aa:bb:cc:dd:ee:ff. Peer must be on the current STA channel.
-
-config PB_ESPNOW_LMK_HEX
-    string "ESP-NOW LMK, 32 hex chars (local sdkconfig only)"
-    default ""
-    help
-        Set a private 16-byte Local Master Key. ESP-NOW is disabled unless
-        both a valid peer MAC and LMK are configured.
+menu "PowerBank64 monitor"
 
 config PB_I2C_SDA_GPIO
     int "I2C SDA GPIO"
@@ -43,59 +10,64 @@ config PB_I2C_SCL_GPIO
     range 0 48
     default 9
 
-config PB_LCD_SCLK_GPIO
-    int "GC9107 SPI clock GPIO"
-    range 0 48
-    default 12
+config PB_OLED_I2C_ADDRESS
+    int "SSD1306-compatible OLED I2C address (60=0x3C, 61=0x3D)"
+    range 60 61
+    default 60
 
-config PB_LCD_MOSI_GPIO
-    int "GC9107 SPI MOSI GPIO"
-    range 0 48
-    default 11
+config PB_INA226_ADDRESS
+    int "INA226 I2C address"
+    range 64 79
+    default 64
 
-config PB_LCD_CS_GPIO
-    int "GC9107 chip select GPIO"
-    range 0 48
-    default 10
-
-config PB_LCD_DC_GPIO
-    int "GC9107 data/command GPIO"
-    range 0 48
-    default 13
-
-config PB_LCD_RST_GPIO
-    int "GC9107 reset GPIO"
-    range 0 48
-    default 14
-
-config PB_LCD_BL_GPIO
-    int "GC9107 backlight control GPIO"
-    range 0 48
-    default 15
-
-config PB_PACK_A_SHUNT_UOHM
-    int "Pack A INA226 shunt resistance in micro-ohms (0 disables current)"
+config PB_INA226_SHUNT_UOHM
+    int "INA226 shunt resistance in micro-ohms (0 disables current/power)"
     range 0 1000000
     default 0
 
-config PB_PACK_B_SHUNT_UOHM
-    int "Pack B INA226 shunt resistance in micro-ohms (0 disables current)"
-    range 0 1000000
-    default 0
+config PB_INA226_INVERT_CURRENT
+    bool "Invert INA226 current sign"
+    default n
+    help
+        Enable if measured discharge current is negative.
 
-config PB_ENABLE_12V_GPIO
-    int "12 V enable request GPIO (held LOW by this firmware)"
+config PB_TOUCH_LEFT_GPIO
+    int "Up touch-module output GPIO"
     range 0 48
-    default 16
+    default 1
 
-config PB_ENABLE_24V_GPIO
-    int "24 V enable request GPIO (held LOW by this firmware)"
+config PB_TOUCH_OK_GPIO
+    int "OK touch-module output GPIO"
     range 0 48
-    default 17
+    default 2
 
-config PB_ENABLE_USB_GPIO
-    int "USB enable request GPIO (held LOW by this firmware)"
+config PB_TOUCH_RIGHT_GPIO
+    int "Down touch-module output GPIO"
     range 0 48
-    default 18
+    default 4
+
+config PB_TOUCH_ACTIVE_LOW
+    bool "Touch-module output is active low"
+    default n
+
+config PB_NTC1_GPIO
+    int "NTC 1 ADC GPIO"
+    range 0 48
+    default 5
+
+config PB_NTC2_GPIO
+    int "NTC 2 ADC GPIO"
+    range 0 48
+    default 6
+
+config PB_DHT_GPIO
+    int "DHT22 data GPIO"
+    range 0 48
+    default 47
+
+config PB_TOUCH_LONG_MS
+    int "Long-press threshold in milliseconds"
+    range 500 5000
+    default 2000
 
 endmenu

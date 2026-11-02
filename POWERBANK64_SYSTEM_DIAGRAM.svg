@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1720" height="1260" viewBox="0 0 1720 1260">
+  <defs>
+    <marker id="arrow-power" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#d97706"/>
+    </marker>
+    <marker id="arrow-signal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#2878c8"/>
+    </marker>
+    <style>
+      text { font-family: Arial, sans-serif; fill: #17283c; }
+      .title { font-size: 34px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #536579; }
+      .section { font-size: 19px; font-weight: 700; }
+      .head { font-size: 18px; font-weight: 700; }
+      .body { font-size: 15px; fill: #405267; }
+      .small { font-size: 13px; fill: #536579; }
+      .warn { font-size: 14px; fill: #9a3412; font-weight: 700; }
+      .card { fill: #fff; stroke: #cbd5e1; stroke-width: 2; }
+      .battery { fill: #17283c; stroke: #17283c; stroke-width: 2; }
+      .batteryText { fill: #fff; }
+      .batterySub { fill: #c3d1df; }
+      .power { fill: none; stroke: #d97706; stroke-width: 5; marker-end: url(#arrow-power); }
+      .powerLine { fill: none; stroke: #d97706; stroke-width: 5; }
+      .signal { fill: none; stroke: #2878c8; stroke-width: 3; stroke-dasharray: 9 7; marker-end: url(#arrow-signal); }
+      .return { fill: none; stroke: #344256; stroke-width: 5; }
+      .tag { fill: #fff7ed; stroke: #fdba74; stroke-width: 1.5; }
+      .note { fill: #fff7df; stroke: #e4b74a; stroke-width: 1.5; }
+      .logic { fill: #eff6ff; stroke: #86b8e8; stroke-width: 2; }
+      .output { fill: #f0fdf4; stroke: #86c79b; stroke-width: 2; }
+    </style>
+  </defs>
+
+  <rect width="1720" height="1260" fill="#f3f6fa"/>
+  <rect x="28" y="24" width="1664" height="1212" rx="24" fill="#fff" stroke="#d7dee8" stroke-width="2"/>
+  <text x="64" y="76" class="title">PowerBank64 — общая функциональная схема</text>
+  <text x="64" y="108" class="subtitle">Два съёмных 4S8P пака → взаимоисключающий A/B селектор → выходы и MotherBox с ESP32-S3</text>
+
+  <text x="64" y="157" class="section">БАТАРЕЙНЫЕ БЛОКИ · ОДИН ПАК ПИТАЕТ СИСТЕМУ</text>
+
+  <rect x="64" y="184" width="246" height="158" rx="16" class="battery"/>
+  <text x="88" y="219" class="head batteryText">PACK A · 4S8P</text>
+  <text x="88" y="249" class="body batterySub">32 × 21700 · BMS A</text>
+  <text x="88" y="275" class="body batterySub">предохранитель у батареи</text>
+  <text x="88" y="307" class="small batterySub">выход P+ / P− → XT60</text>
+
+  <rect x="64" y="386" width="246" height="158" rx="16" class="battery"/>
+  <text x="88" y="421" class="head batteryText">PACK B · 4S8P</text>
+  <text x="88" y="451" class="body batterySub">32 × 21700 · BMS B</text>
+  <text x="88" y="477" class="body batterySub">предохранитель у батареи</text>
+  <text x="88" y="509" class="small batterySub">выход P+ / P− → XT60</text>
+
+  <rect x="358" y="184" width="282" height="158" rx="16" class="card"/>
+  <text x="382" y="219" class="head">ВХОД PACK A</text>
+  <text x="382" y="250" class="body">XT60 → DC-вход</text>
+  <text x="382" y="276" class="body">предохранитель / защита</text>
+  <text x="382" y="302" class="body">контроль наличия и V</text>
+  <text x="382" y="326" class="small">вход A селектора</text>
+
+  <rect x="358" y="386" width="282" height="158" rx="16" class="card"/>
+  <text x="382" y="421" class="head">ВХОД PACK B</text>
+  <text x="382" y="452" class="body">XT60 → DC-вход</text>
+  <text x="382" y="478" class="body">предохранитель / защита</text>
+  <text x="382" y="504" class="body">контроль наличия и V</text>
+  <text x="382" y="528" class="small">вход B селектора</text>
+
+  <path d="M310 263 H358" class="power"/>
+  <path d="M310 465 H358" class="power"/>
+  <path d="M640 263 H670 V325 H700" class="power"/>
+  <path d="M640 465 H680 V383 H700" class="power"/>
+
+  <rect x="700" y="300" width="192" height="108" rx="16" class="tag"/>
+  <text x="796" y="329" text-anchor="middle" class="head">СЕЛЕКТОР A / B</text>
+  <text x="796" y="356" text-anchor="middle" class="body">2-полюсный · A/B · AUTO</text>
+  <text x="796" y="380" text-anchor="middle" class="body">аппаратно A XOR B</text>
+  <text x="796" y="400" text-anchor="middle" class="small">выход → BAT_BUS · 4S</text>
+
+  <path d="M892 354 H916" class="power"/>
+  <rect x="916" y="300" width="156" height="108" rx="16" class="card"/>
+  <text x="994" y="337" text-anchor="middle" class="head">MAIN</text>
+  <text x="994" y="366" text-anchor="middle" class="body">DC-выключатель</text>
+  <text x="994" y="390" text-anchor="middle" class="small">с рейтингом DC</text>
+
+  <path d="M1072 354 H1093" class="power"/>
+  <rect x="1093" y="300" width="185" height="108" rx="16" class="card"/>
+  <text x="1185" y="334" text-anchor="middle" class="head">INA226</text>
+  <text x="1185" y="363" text-anchor="middle" class="body">шунт в общей линии</text>
+  <text x="1185" y="389" text-anchor="middle" class="small">только суммарный ток</text>
+
+  <path d="M1278 354 H1310" class="power"/>
+  <rect x="1310" y="314" width="300" height="80" rx="16" class="tag"/>
+  <text x="1460" y="347" text-anchor="middle" class="head">SYS BUS · 4S</text>
+  <text x="1460" y="374" text-anchor="middle" class="body">питает все ветви нагрузки</text>
+  <path d="M1460 394 V424" class="powerLine"/>
+  <rect x="1310" y="424" width="300" height="90" rx="14" class="logic"/>
+  <text x="1460" y="461" text-anchor="middle" class="head">HOLD-UP / UPS</text>
+  <text x="1460" y="489" text-anchor="middle" class="small">буфер на время A ↔ B · рассчитать</text>
+
+  <rect x="64" y="574" width="1546" height="58" rx="12" class="note"/>
+  <text x="88" y="599" class="warn">ВАЖНО:</text>
+  <text x="165" y="599" class="body">Паки не работают параллельно: переключатель должен физически исключать одновременное соединение A и B.</text>
+  <text x="88" y="621" class="small">Для переключения без провала нужен рассчитанный hold-up и break-before-make селектор; это ещё не выбрано и не испытано.</text>
+
+  <text x="64" y="686" class="section">ОТДЕЛЬНЫЕ ВЫХОДНЫЕ ВЕТВИ ОТ SYS BUS</text>
+  <text x="64" y="711" class="small">На каждой ветви — свой входной предохранитель; силовой выход и обратный провод прокладываются парой к своему разъёму.</text>
+
+  <path d="M1610 354 H1632 V758 H918" class="powerLine"/>
+  <circle cx="1632" cy="758" r="7" fill="#d97706"/>
+  <path d="M918 758 V1068" class="powerLine"/>
+  <path d="M918 838 H875" class="power"/>
+  <path d="M918 1005 H875" class="power"/>
+  <path d="M918 868 H930" class="power"/>
+  <path d="M918 1068 H956" class="power"/>
+
+  <rect x="64" y="744" width="811" height="188" rx="18" class="output"/>
+  <text x="90" y="779" class="head">12 V × 3 · ТРИ НЕЗАВИСИМЫЕ ВЕТВИ</text>
+  <text x="90" y="808" class="body">От SYS BUS → отдельный предохранитель → свой buck-boost → защита / выключатель → свой выходной разъём.</text>
+  <rect x="95" y="833" width="220" height="72" rx="12" class="card"/>
+  <text x="205" y="861" text-anchor="middle" class="head">DC-DC №1</text>
+  <text x="205" y="887" text-anchor="middle" class="body">12 V · до 2 A → OUT 1</text>
+  <rect x="351" y="833" width="220" height="72" rx="12" class="card"/>
+  <text x="461" y="861" text-anchor="middle" class="head">DC-DC №2</text>
+  <text x="461" y="887" text-anchor="middle" class="body">12 V · до 2 A → OUT 2</text>
+  <rect x="607" y="833" width="220" height="72" rx="12" class="card"/>
+  <text x="717" y="861" text-anchor="middle" class="head">DC-DC №3</text>
+  <text x="717" y="887" text-anchor="middle" class="body">12 V · до 2 A → OUT 3</text>
+  <text x="90" y="923" class="small">Номиналы предохранителей, полярность и разъёмы — по реальным модулям и нагрузкам.</text>
+
+  <rect x="64" y="954" width="811" height="122" rx="18" class="output"/>
+  <text x="90" y="986" class="head">24 V · ОДНА ВЕТВЬ</text>
+  <text x="90" y="1015" class="body">SYS BUS → предохранитель → boost → аппаратный выключатель / защита → выход 24 V.</text>
+  <text x="90" y="1044" class="warn">Параметр не решён: 24 V × 2,5 A = 60 W; для 80 W нужно около 3,34 A.</text>
+  <text x="90" y="1067" class="small">До уточнения не считать 80 W подтверждённой нагрузкой.</text>
+
+  <rect x="930" y="788" width="680" height="160" rx="18" class="output"/>
+  <text x="956" y="822" class="head">USB · 5 V И FAST-CHARGE ПРОФИЛИ</text>
+  <text x="956" y="851" class="body">SYS BUS → отдельная защита каждой платы → USB/PD-модули → штатные порты.</text>
+  <rect x="963" y="872" width="280" height="54" rx="10" class="card"/>
+  <text x="1103" y="905" text-anchor="middle" class="body">USB module 1 · Baseus / fast charge</text>
+  <rect x="1272" y="872" width="300" height="54" rx="10" class="card"/>
+  <text x="1422" y="905" text-anchor="middle" class="body">USB module 2 · fast charge</text>
+  <text x="956" y="944" class="small">Базовый USB 5 V; fast-charge профили и вход 4S проверить по маркировке / документации плат.</text>
+
+  <rect x="930" y="974" width="680" height="180" rx="18" class="logic"/>
+  <text x="956" y="1008" class="head">MOTHERBOX · ЛОГИЧЕСКАЯ ВЕТВЬ 5 V</text>
+  <rect x="956" y="1030" width="160" height="76" rx="12" class="card"/>
+  <text x="1036" y="1058" text-anchor="middle" class="body">F_LOGIC</text>
+  <text x="1036" y="1084" text-anchor="middle" class="body">DC-DC 5 V</text>
+  <path d="M1116 1068 H1142" class="power"/>
+  <rect x="1142" y="1030" width="170" height="76" rx="12" class="card"/>
+  <text x="1227" y="1060" text-anchor="middle" class="head">ESP32-S3</text>
+  <text x="1227" y="1085" text-anchor="middle" class="small">3,3 V GPIO</text>
+  <path d="M1312 1068 H1338" class="signal"/>
+  <rect x="1338" y="1030" width="246" height="76" rx="12" class="card"/>
+  <text x="1461" y="1056" text-anchor="middle" class="body">INA226 · GC9107</text>
+  <text x="1461" y="1082" text-anchor="middle" class="body">DHT22 · NTC · touch</text>
+  <text x="956" y="1133" class="small">GPIO: I²C 8/9 · TFT 11/12/10/13/14/15 · touch 1/2/4 · NTC 5/6 · DHT22 47 · fan 21 (план)</text>
+  <text x="956" y="1150" class="small">LM2596 5 V → DevKit 5V/VIN; логика 3,3 V. GPIO не переключают батареи; автоуправление ещё не реализовано.</text>
+
+  <path d="M1185 408 V542 H1664 V1068 H1610" class="signal"/>
+  <rect x="1265" y="508" width="300" height="48" rx="10" class="logic"/>
+  <text x="1415" y="538" text-anchor="middle" class="small">INA226 SDA/SCL → ESP32 GPIO 8/9</text>
+  <text x="64" y="1188" class="small">Общий SYS− / возврат к P− через BMS: сверить схему конкретных преобразователей. Для изолированных выходов не объединять минусы без проверки.</text>
+
+  <rect x="64" y="1200" width="1546" height="26" rx="8" fill="#fff7df"/>
+  <text x="837" y="1219" text-anchor="middle" class="small">Функциональная архитектура, не монтажная схема: фактические платы, токи, теплоотвод и защиты должны быть подтверждены до силовой пайки.</text>
+</svg>

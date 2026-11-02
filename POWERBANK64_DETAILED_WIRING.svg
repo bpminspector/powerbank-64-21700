@@ -1,0 +1,269 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="2460" viewBox="0 0 1800 2460">
+  <defs>
+    <marker id="arrow-power" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#d97706"/>
+    </marker>
+    <marker id="arrow-signal" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#2878c8"/>
+    </marker>
+    <style>
+      text { font-family: Arial, sans-serif; fill: #17283c; }
+      .title { font-size: 34px; font-weight: 700; }
+      .subtitle { font-size: 18px; fill: #536579; }
+      .section { font-size: 22px; font-weight: 700; }
+      .head { font-size: 18px; font-weight: 700; }
+      .body { font-size: 15px; fill: #405267; }
+      .small { font-size: 13px; fill: #536579; }
+      .tiny { font-size: 12px; fill: #536579; }
+      .warn { font-size: 15px; fill: #9a3412; font-weight: 700; }
+      .white { fill: #fff; }
+      .muted-white { fill: #cbd5e1; }
+      .frame { fill: #fff; stroke: #d7dee8; stroke-width: 2; }
+      .card { fill: #fff; stroke: #bdc9d8; stroke-width: 2; }
+      .battery { fill: #17283c; stroke: #17283c; stroke-width: 2; }
+      .logic { fill: #eff6ff; stroke: #86b8e8; stroke-width: 2; }
+      .power-box { fill: #fff7ed; stroke: #fdba74; stroke-width: 2; }
+      .output { fill: #f0fdf4; stroke: #86c79b; stroke-width: 2; }
+      .unknown { fill: #fff7df; stroke: #e4b74a; stroke-width: 2; stroke-dasharray: 8 6; }
+      .danger { fill: #fff1f2; stroke: #e99aa1; stroke-width: 2; }
+      .power { fill: none; stroke: #d97706; stroke-width: 5; marker-end: url(#arrow-power); }
+      .power-line { fill: none; stroke: #d97706; stroke-width: 5; }
+      .return { fill: none; stroke: #344256; stroke-width: 5; }
+      .signal { fill: none; stroke: #2878c8; stroke-width: 3; stroke-dasharray: 9 7; marker-end: url(#arrow-signal); }
+      .thin-signal { fill: none; stroke: #2878c8; stroke-width: 2.5; stroke-dasharray: 7 6; }
+      .divider { stroke: #d7dee8; stroke-width: 2; }
+      .tag { fill: #e9f7ee; stroke: #86c79b; stroke-width: 1.5; }
+      .tag-text { font-size: 13px; fill: #24633b; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="2460" fill="#f3f6fa"/>
+  <rect x="28" y="24" width="1744" height="2412" rx="24" class="frame"/>
+  <text x="64" y="78" class="title">PowerBank64 — подробная схема соединений</text>
+  <text x="64" y="111" class="subtitle">По hardware_boards.md и текущей распиновке прошивки · компоненты внутри готовых DC-DC модулей не перерисованы</text>
+  <rect x="64" y="132" width="1672" height="54" rx="12" class="danger"/>
+  <text x="88" y="165" class="warn">Это схема соединений модулей, не разрешение собирать силовую часть на макетке. Номиналы с пометкой «УТОЧНИТЬ» нельзя угадывать.</text>
+
+  <text x="64" y="228" class="section">1. БАТАРЕИ И ВЫБОР ПАКА — ТОЛЬКО A ИЛИ B</text>
+
+  <rect x="64" y="254" width="282" height="150" rx="14" class="battery"/>
+  <text x="88" y="286" class="head white">PACK A · 4S8P</text>
+  <text x="88" y="314" class="body muted-white">32 × 21700 · BMS A</text>
+  <text x="88" y="341" class="body muted-white">F_A уже установлен*</text>
+  <text x="88" y="371" class="small muted-white">XT60: P+ / P− после BMS</text>
+
+  <rect x="64" y="450" width="282" height="150" rx="14" class="battery"/>
+  <text x="88" y="482" class="head white">PACK B · 4S8P</text>
+  <text x="88" y="510" class="body muted-white">32 × 21700 · BMS B</text>
+  <text x="88" y="537" class="body muted-white">F_B уже установлен*</text>
+  <text x="88" y="567" class="small muted-white">XT60: P+ / P− после BMS</text>
+
+  <rect x="394" y="254" width="258" height="150" rx="14" class="card"/>
+  <text x="418" y="286" class="head">ВХОД A</text>
+  <text x="418" y="314" class="body">XT60 → полюса A+</text>
+  <text x="418" y="341" class="body">и A− селектора</text>
+  <text x="418" y="371" class="small">Полярность проверить DMM</text>
+
+  <rect x="394" y="450" width="258" height="150" rx="14" class="card"/>
+  <text x="418" y="482" class="head">ВХОД B</text>
+  <text x="418" y="510" class="body">XT60 → полюса B+</text>
+  <text x="418" y="537" class="body">и B− селектора</text>
+  <text x="418" y="567" class="small">Полярность проверить DMM</text>
+
+  <path d="M346 329 H394" class="power"/>
+  <path d="M346 525 H394" class="power"/>
+  <path d="M652 329 H692 V365 H728" class="power"/>
+  <path d="M652 525 H692 V433 H728" class="power"/>
+
+  <rect x="728" y="328" width="342" height="144" rx="16" class="unknown"/>
+  <text x="899" y="359" text-anchor="middle" class="head">ДВУХПОЛЮСНЫЙ СЕЛЕКТОР A/B</text>
+  <text x="899" y="387" text-anchor="middle" class="body">break-before-make · аппаратная блокировка</text>
+  <text x="899" y="414" text-anchor="middle" class="body">одновременно замкнут только один pack</text>
+  <text x="899" y="460" text-anchor="middle" class="warn">СЕЛЕКТОР ПОКА НЕ ВЫБРАН</text>
+
+  <path d="M1070 400 H1112" class="power"/>
+  <rect x="1112" y="328" width="264" height="144" rx="16" class="card"/>
+  <text x="1244" y="361" text-anchor="middle" class="head">QIUWU INA226</text>
+  <text x="1244" y="390" text-anchor="middle" class="body">36 V · измеритель на SYS+</text>
+  <text x="1244" y="417" text-anchor="middle" class="body">шунт/предел тока проверить</text>
+  <text x="1244" y="445" text-anchor="middle" class="small">IN+/IN− сверить с маркировкой платы</text>
+
+  <path d="M1376 400 H1420" class="power"/>
+  <rect x="1420" y="345" width="290" height="110" rx="16" class="power-box"/>
+  <text x="1565" y="380" text-anchor="middle" class="head">SYS BUS · 4S</text>
+  <text x="1565" y="411" text-anchor="middle" class="body">SYS+ и SYS− питают ветви</text>
+  <text x="1565" y="437" text-anchor="middle" class="small">общая земля не изолирована</text>
+
+  <path d="M1565 455 V502" class="power-line"/>
+  <rect x="1374" y="502" width="336" height="86" rx="14" class="unknown"/>
+  <text x="1542" y="537" text-anchor="middle" class="head">HOLD-UP / UPS</text>
+  <text x="1542" y="565" text-anchor="middle" class="body">узел и ёмкость ещё не выбраны</text>
+
+  <rect x="64" y="626" width="1646" height="74" rx="12" class="danger"/>
+  <text x="88" y="657" class="warn">* Нужны фото/маркировка установленной BMS и предохранителей: список даёт только семейство BMS 3S/4S 40/60 A.</text>
+  <text x="88" y="682" class="body">Не соединять BAT A и BAT B напрямую. XT60 — не выключатель под нагрузкой. Значения F_A/F_B должны соответствовать проводам, BMS и току.</text>
+
+  <line x1="64" y1="730" x2="1710" y2="730" class="divider"/>
+  <text x="64" y="773" class="section">2. ВЫХОДЫ ОТ SYS BUS — ОТДЕЛЬНЫЙ ПРЕДОХРАНИТЕЛЬ НА КАЖДУЮ ВЕТВЬ</text>
+  <text x="64" y="801" class="small">SYS+ разветвляется после главной защиты. SYS− идёт отдельным возвратным проводом к каждому преобразователю и нагрузке.</text>
+
+  <rect x="64" y="832" width="1646" height="470" rx="18" class="output"/>
+  <path d="M111 874 H1650" class="power-line"/>
+  <text x="90" y="860" class="small">SYS+</text>
+
+  <rect x="92" y="902" width="365" height="148" rx="14" class="card"/>
+  <text x="274" y="932" text-anchor="middle" class="head">12 V × 3 · ТЕКУЩИЕ STEP-DOWN №1–3</text>
+  <text x="116" y="962" class="body">Каждая ветвь: SYS+ → F12_i → DC-DC → OUT</text>
+  <text x="116" y="989" class="body">Модуль в списке: 6–40 V → 1.2–35 V buck</text>
+  <text x="116" y="1018" class="warn">НЕ гарантирует 12 V при 4S ниже 12 V.</text>
+
+  <rect x="482" y="902" width="360" height="148" rx="14" class="card"/>
+  <text x="662" y="932" text-anchor="middle" class="head">ТВОЙ 24 V BOOST · 600 W*</text>
+  <text x="506" y="962" class="body">Заявлено: вход 10–60 V, выход 12–80 V.</text>
+  <text x="506" y="989" class="body">SYS+ → F24 → плата → J24 (выставить 24 V)</text>
+  <text x="506" y="1018" class="warn">24 V × 2.5 A = 60 W, не 80 W.</text>
+
+  <rect x="867" y="902" width="360" height="148" rx="14" class="card"/>
+  <text x="1047" y="932" text-anchor="middle" class="head">USB №1/2 · FAST CHARGE</text>
+  <text x="891" y="962" class="body">SYS+ → FUSB → вход платы → её USB</text>
+  <text x="891" y="989" class="body">На странице указано 90/100 W</text>
+  <text x="891" y="1018" class="warn">Вход 4S и реальную мощность проверить.</text>
+
+  <rect x="1252" y="902" width="430" height="148" rx="14" class="unknown"/>
+  <text x="1467" y="932" text-anchor="middle" class="head">BASEUS USB В MOTHERBOX</text>
+  <text x="1276" y="962" class="body">Модель/входной диапазон не указаны</text>
+  <text x="1276" y="989" class="body">Только по маркировке платы определить:</text>
+  <text x="1276" y="1018" class="warn">прямое 4S подключение пока запрещено.</text>
+
+  <path d="M274 874 V902" class="power"/>
+  <path d="M662 874 V902" class="power"/>
+  <path d="M1047 874 V902" class="power"/>
+  <path d="M1467 874 V902" class="power"/>
+
+  <rect x="92" y="1072" width="360" height="120" rx="14" class="unknown"/>
+  <text x="272" y="1102" text-anchor="middle" class="head">F12_i + ВЫХОДНОЙ КЛЮЧ</text>
+  <text x="116" y="1133" class="body">Предохранитель до каждого DC-DC.</text>
+  <text x="116" y="1160" class="body">S12_i управляет EN только если вход есть;</text>
+  <text x="116" y="1184" class="small">иначе нужен рассчитанный DC-выключатель.</text>
+
+  <rect x="482" y="1072" width="360" height="120" rx="14" class="unknown"/>
+  <text x="662" y="1102" text-anchor="middle" class="head">J24 · СВОЙ ВЫХОД</text>
+  <text x="506" y="1133" class="body">+24 V / SYS−, отдельная защита ветви.</text>
+  <text x="506" y="1160" class="body">Ток и предохранитель выбрать по нагрузке.</text>
+  <text x="506" y="1184" class="small">Проверить OFF: boost может пропускать вход.</text>
+
+  <rect x="867" y="1072" width="360" height="120" rx="14" class="unknown"/>
+  <text x="1047" y="1102" text-anchor="middle" class="head">ИНДИКАЦИЯ / КНОПКИ</text>
+  <text x="891" y="1133" class="body">Красный/зелёный LED в кнопке:</text>
+  <text x="891" y="1160" class="body">распиновка и встроенный резистор неизвестны.</text>
+  <text x="891" y="1184" class="small">Не подключать LED напрямую к GPIO.</text>
+
+  <rect x="1252" y="1072" width="430" height="120" rx="14" class="unknown"/>
+  <text x="1467" y="1102" text-anchor="middle" class="head">ПРЕДОХРАНИТЕЛИ F12/F24/FUSB</text>
+  <text x="1276" y="1133" class="body">Номиналы не заданы: нужны ток нагрузки,</text>
+  <text x="1276" y="1160" class="body">пусковой ток, сечение и длина проводов.</text>
+  <text x="1276" y="1184" class="small">Выбирать защиту по самому слабому звену.</text>
+
+  <rect x="92" y="1210" width="1590" height="64" rx="12" class="danger"/>
+  <text x="116" y="1238" class="warn">* Наклейка «600 W» не подтверждает 80 W непрерывно в корпусе. Проверить входной ток, охлаждение, просадки и нагрев под реальной нагрузкой.</text>
+  <text x="116" y="1262" class="body">Стабильный 12 V по всему диапазону 4S требует buck-boost либо подтверждённого ограничения разряда до порога buck-модуля.</text>
+
+  <line x1="64" y1="1330" x2="1710" y2="1330" class="divider"/>
+  <text x="64" y="1373" class="section">3. MOTHERBOX — ПИТАНИЕ ЛОГИКИ И СИГНАЛЬНЫЕ СОЕДИНЕНИЯ</text>
+
+  <rect x="64" y="1400" width="410" height="182" rx="16" class="power-box"/>
+  <text x="269" y="1432" text-anchor="middle" class="head">ЛОГИЧЕСКАЯ ВЕТВЬ 5 V</text>
+  <text x="88" y="1462" class="body">SYS+ → F_LOGIC (номинал TBD)</text>
+  <text x="88" y="1489" class="body">→ LM2596 → настроить 5.00 V DMM</text>
+  <text x="88" y="1516" class="body">→ вход 5V/VIN ESP32 (пин уточнить)</text>
+  <text x="88" y="1545" class="small">Не подавать 5 V на 3V3/GPIO.</text>
+  <text x="88" y="1568" class="small">Не подключать USB-PC одновременно, пока не</text>
+  <text x="88" y="1587" class="small">проверена защита DevKit от обратной подачи.</text>
+
+  <path d="M474 1490 H520" class="power"/>
+  <rect x="520" y="1400" width="380" height="182" rx="16" class="logic"/>
+  <text x="710" y="1432" text-anchor="middle" class="head">ESP32-S3 N8R2</text>
+  <text x="544" y="1462" class="body">Плата с фото image.png; маркировка N8R2.</text>
+  <text x="544" y="1489" class="body">Питание: контакт 5V; общий GND.</text>
+  <text x="544" y="1516" class="body">На GPIO только логика 3.3 V.</text>
+  <text x="544" y="1545" class="small">Нельзя управлять силовыми выходами напрямую.</text>
+  <text x="544" y="1568" class="small">USB-C и 5V-вход не питать одновременно.</text>
+
+  <path d="M900 1490 H943" class="signal"/>
+  <rect x="943" y="1400" width="767" height="182" rx="16" class="logic"/>
+  <text x="1326" y="1432" text-anchor="middle" class="head">ОБЩАЯ I²C ШИНА · ТОЛЬКО 3.3 V ЛОГИКА</text>
+  <text x="967" y="1462" class="body">GPIO8 SDA ───────── INA226 SDA ───────── дисплей SDA*</text>
+  <text x="967" y="1489" class="body">GPIO9 SCL ───────── INA226 SCL ───────── дисплей SCL*</text>
+  <text x="967" y="1516" class="body">3V3 ───────── VCC модулей (если их спецификация это допускает)</text>
+  <text x="967" y="1545" class="body">GND ───────── GND всех низковольтных модулей</text>
+  <text x="967" y="1570" class="small">* Только если GME12864 действительно I²C; интерфейс дисплея уточнить.</text>
+
+  <rect x="64" y="1610" width="530" height="210" rx="16" class="logic"/>
+  <text x="329" y="1642" text-anchor="middle" class="head">DHT22 · GPIO47</text>
+  <text x="92" y="1674" class="body">VCC → 3V3; GND → GND; DATA → GPIO47</text>
+  <text x="92" y="1702" class="body">R1 = 4.7 kΩ между DATA и 3V3</text>
+  <text x="92" y="1730" class="body">C1 = 100 nF между VCC и GND у датчика</text>
+  <text x="92" y="1758" class="small">Для голого DHT22; у готового модуля проверить</text>
+  <text x="92" y="1781" class="small">наличие pull-up и конденсатора на плате.</text>
+
+  <rect x="618" y="1610" width="530" height="210" rx="16" class="unknown"/>
+  <text x="883" y="1642" text-anchor="middle" class="head">ДИСПЛЕЙ GME12864</text>
+  <text x="646" y="1674" class="body">Точная распиновка/интерфейс по записи неясны.</text>
+  <text x="646" y="1702" class="body">Не подключать по GC9107/SSD1306 схеме вслепую.</text>
+  <text x="646" y="1730" class="body">Нужны фото задней стороны и маркировки.</text>
+  <text x="646" y="1758" class="small">В документации прошивки указаны разные типы</text>
+  <text x="646" y="1781" class="small">дисплея; их надо свести к фактическому модулю.</text>
+
+  <rect x="1172" y="1610" width="538" height="210" rx="16" class="unknown"/>
+  <text x="1441" y="1642" text-anchor="middle" class="head">ТРИ СЕНСОРНЫХ КНОПКИ</text>
+  <text x="1200" y="1674" class="body">UP → GPIO1; OK → GPIO2; DOWN → GPIO4</text>
+  <text x="1200" y="1702" class="body">Нужны цифровые выходы 3.3 V touch-модулей.</text>
+  <text x="1200" y="1730" class="body">На каждую кнопку: VCC/GND/OUT; тип неизвестен.</text>
+  <text x="1200" y="1758" class="small">Не подключать голую сенсорную площадку к GPIO</text>
+  <text x="1200" y="1781" class="small">без подходящего контроллера/схемы.</text>
+
+  <rect x="64" y="1846" width="530" height="194" rx="16" class="unknown"/>
+  <text x="329" y="1878" text-anchor="middle" class="head">INA226 ↔ ESP32</text>
+  <text x="92" y="1910" class="body">SDA/SCL → GPIO8/GPIO9; адрес по плате</text>
+  <text x="92" y="1938" class="body">Один измеритель после селектора видит активный pack.</text>
+  <text x="92" y="1966" class="body">Шунт и предел платы должны выдерживать ток.</text>
+  <text x="92" y="1994" class="small">На I²C оставить один набор pull-up к 3V3:</text>
+  <text x="92" y="2017" class="small">значение/наличие на платах сначала проверить.</text>
+
+  <rect x="618" y="1846" width="530" height="194" rx="16" class="unknown"/>
+  <text x="883" y="1878" text-anchor="middle" class="head">NTC И ВЕНТИЛЯТОР</text>
+  <text x="646" y="1910" class="body">NTC1 → GPIO5 ADC1; NTC2 → GPIO6 ADC1</text>
+  <text x="646" y="1938" class="body">NTC + Rфикс. образуют делитель к 3V3/GND.</text>
+  <text x="646" y="1966" class="body">Rфикс зависит от NTC (номинал/B неизвестны).</text>
+  <text x="646" y="1994" class="small">Вентилятор через MOSFET/драйвер, не GPIO;</text>
+  <text x="646" y="2017" class="small">его ток, MOSFET и защита требуют модели вентилятора.</text>
+
+  <rect x="1172" y="1846" width="538" height="194" rx="16" class="unknown"/>
+  <text x="1441" y="1878" text-anchor="middle" class="head">ВЫКЛЮЧАТЕЛИ И LED</text>
+  <text x="1200" y="1910" class="body">Красный/зелёный LED: выводы и резисторы неизвестны.</text>
+  <text x="1200" y="1938" class="body">GPIO не питает светодиод/катушку напрямую.</text>
+  <text x="1200" y="1966" class="body">Силовой путь через GPIO запрещён.</text>
+  <text x="1200" y="1994" class="small">Нужны маркировка и схема кнопки; затем подобрать</text>
+  <text x="1200" y="2017" class="small">внешний резистор/транзистор, если они не встроены.</text>
+
+  <line x1="64" y1="2070" x2="1710" y2="2070" class="divider"/>
+  <text x="64" y="2114" class="section">4. ЧТО УЖЕ ОПРЕДЕЛЕНО И ЧТО НЕЛЬЗЯ ПАЯТЬ «НАУГАД»</text>
+
+  <rect x="64" y="2142" width="800" height="228" rx="16" class="tag"/>
+  <text x="92" y="2178" class="head">ПОДТВЕРЖДЕНО В ТЕКУЩЕМ СПИСКЕ</text>
+  <text x="92" y="2212" class="body">• 2 отдельных 4S8P пака; общая шина питается только от выбранного.</text>
+  <text x="92" y="2242" class="body">• QIUWU INA226 36 V; LM2596 как логический 5 V DC-DC.</text>
+  <text x="92" y="2272" class="body">• DC-DC buck 6–40 V; boost 10–60 V → 12–80 V (заявления продавца).</text>
+  <text x="92" y="2302" class="body">• DHT22; его GPIO и базовая обвязка отмечены выше.</text>
+  <text x="92" y="2332" class="small">Платы использовать только после проверки маркировки, распиновки и диапазонов.</text>
+
+  <rect x="894" y="2142" width="816" height="228" rx="16" class="danger"/>
+  <text x="922" y="2178" class="head">ДЛЯ ТОЧНОЙ ПАЯЛЬНОЙ ВЕРСИИ НУЖНЫ</text>
+  <text x="922" y="2212" class="body">• фото BMS/предохранителей и номиналы; селектор + hold-up ещё не выбраны.</text>
+  <text x="922" y="2242" class="body">• buck-boost на три стабильных 12 V выхода; проверить заявленный 24 V boost под нагрузкой.</text>
+  <text x="922" y="2272" class="body">• точная Baseus/USB-плата и подтверждённый входной диапазон от 4S.</text>
+  <text x="922" y="2302" class="body">• интерфейс дисплея, модели touch-кнопок, NTC, вентилятор и LED-кнопки.</text>
+  <text x="922" y="2332" class="small">Номиналы F, проводов и силовых ключей определяются по реальным токам/даташитам.</text>
+
+  <text x="64" y="2404" class="small">Легенда: оранжевый — силовая линия; синий пунктир — сигнал; жёлтая рамка — требуется уточнение; красная — не подключать до проверки.</text>
+</svg>

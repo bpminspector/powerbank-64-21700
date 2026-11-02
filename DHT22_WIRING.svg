@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+  <rect width="1200" height="760" fill="#f3f6fa"/>
+  <rect x="28" y="28" width="1144" height="704" rx="24" fill="#ffffff" stroke="#d7dee8" stroke-width="2"/>
+  <text x="64" y="82" font-family="Arial,sans-serif" font-size="32" font-weight="700" fill="#142338">DHT22 → ESP32-S3</text>
+  <text x="64" y="116" font-family="Arial,sans-serif" font-size="18" fill="#506176">Bare 4-pin sensor • direct 3.3 V connection</text>
+
+  <rect x="80" y="180" width="300" height="420" rx="18" fill="#17283c"/>
+  <text x="230" y="224" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" font-weight="700" fill="#ffffff">ESP32-S3</text>
+  <text x="230" y="253" text-anchor="middle" font-family="Arial,sans-serif" font-size="15" fill="#afc1d5">DevKitC-1</text>
+  <circle cx="380" cy="300" r="7" fill="#ef5350"/>
+  <circle cx="380" cy="410" r="7" fill="#f4c542"/>
+  <circle cx="380" cy="520" r="7" fill="#8b98a8"/>
+  <text x="350" y="306" text-anchor="end" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#ffffff">3V3</text>
+  <text x="350" y="416" text-anchor="end" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#ffffff">GPIO 47</text>
+  <text x="350" y="526" text-anchor="end" font-family="Arial,sans-serif" font-size="20" font-weight="700" fill="#ffffff">GND</text>
+
+  <rect x="760" y="232" width="300" height="338" rx="34" fill="#e8eef5" stroke="#8798aa" stroke-width="3"/>
+  <path d="M805 256 Q910 198 1015 256" fill="none" stroke="#9eacba" stroke-width="3"/>
+  <circle cx="825" cy="280" r="5" fill="#b5c1cd"/>
+  <circle cx="865" cy="264" r="5" fill="#b5c1cd"/>
+  <circle cx="910" cy="258" r="5" fill="#b5c1cd"/>
+  <circle cx="955" cy="264" r="5" fill="#b5c1cd"/>
+  <circle cx="995" cy="280" r="5" fill="#b5c1cd"/>
+  <text x="930" y="350" text-anchor="middle" font-family="Arial,sans-serif" font-size="30" font-weight="700" fill="#26394e">DHT22</text>
+  <text x="930" y="382" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" fill="#506176">front grille faces you</text>
+
+  <path d="M387 300 H760" fill="none" stroke="#e53935" stroke-width="6"/>
+  <path d="M387 410 H760" fill="none" stroke="#d99d00" stroke-width="6"/>
+  <path d="M387 520 H760" fill="none" stroke="#546273" stroke-width="6"/>
+  <path d="M760 300 H810" fill="none" stroke="#e53935" stroke-width="6"/>
+  <path d="M760 410 H810" fill="none" stroke="#d99d00" stroke-width="6"/>
+  <path d="M760 520 H810" fill="none" stroke="#546273" stroke-width="6"/>
+  <text x="825" y="306" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#26394e">VCC (pin 1)</text>
+  <text x="825" y="416" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#26394e">DATA (pin 2)</text>
+  <text x="825" y="474" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#26394e">NC (pin 3)</text>
+  <text x="825" y="526" font-family="Arial,sans-serif" font-size="15" font-weight="700" fill="#26394e">GND (pin 4)</text>
+  <path d="M760 468 H792" fill="none" stroke="#8798aa" stroke-width="3"/>
+  <path d="M785 461 L799 475 M799 461 L785 475" fill="none" stroke="#b42318" stroke-width="3"/>
+
+  <rect x="545" y="330" width="92" height="48" rx="7" fill="#fff7df" stroke="#ca9700" stroke-width="3"/>
+  <path d="M591 300 V330 M591 378 V410" fill="none" stroke="#ca9700" stroke-width="5"/>
+  <text x="591" y="360" text-anchor="middle" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#664c00">4.7 kΩ</text>
+  <text x="591" y="398" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" fill="#664c00">pull-up</text>
+
+  <rect x="410" y="546" width="300" height="100" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <path d="M446 573 H477 M446 619 H489 M477 563 V584 M489 608 V619" fill="none" stroke="#25364a" stroke-width="3"/>
+  <path d="M477 584 V608 M489 584 V608" fill="none" stroke="#25364a" stroke-width="4"/>
+  <text x="520" y="581" font-family="Arial,sans-serif" font-size="17" font-weight="700" fill="#26394e">C1: 100 nF</text>
+  <text x="520" y="607" font-family="Arial,sans-serif" font-size="14" fill="#506176">across VCC ↔ GND,</text>
+  <text x="520" y="628" font-family="Arial,sans-serif" font-size="14" fill="#506176">close to the sensor</text>
+
+  <rect x="64" y="674" width="1072" height="34" rx="10" fill="#eaf3ff"/>
+  <text x="600" y="698" text-anchor="middle" font-family="Arial,sans-serif" font-size="16" font-weight="700" fill="#234a75">3-pin module: VCC → 3V3, OUT → GPIO47, GND → GND. Add 4.7 kΩ only if the board has no pull-up. No diode.</text>
+</svg>

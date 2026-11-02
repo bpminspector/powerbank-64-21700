@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+firmware/build/generated/pb_wifi_config.h
 .dev.vars
 *.pem
 *.key

@@ -7,9 +7,6 @@
 #include "driver/spi_master.h"
 #include "esp_err.h"
 #include "esp_check.h"
-#include "esp_lcd_gc9107.h"
-#include "esp_lcd_panel_io.h"
-#include "esp_lcd_panel_ops.h"
 #include "esp_log.h"
 #include "esp_heap_caps.h"
 
@@ -24,7 +21,7 @@
 #define COLOR_RED 0xF800
 
 static const char *TAG = "display";
-static esp_lcd_panel_handle_t s_panel;
+static spi_device_handle_t s_spi;
 static uint16_t *s_frame;
 
 static const uint8_t *glyph(char c)
@@ -113,6 +110,36 @@ static void draw_value_line(int y, char pack, const pb_pack_sample_t *sample)
     draw_text(5, y, line, COLOR_WHITE, 1);
 }
 
+/* Draw a big two-digit percentage, scale 3. */
+static void draw_soc_big(int x, int y, unsigned pct, uint16_t color)
+{
+    char buf[8];
+    if (pct > 100) pct = 100;
+    int n = snprintf(buf, sizeof(buf), "%u%%", pct);
+    draw_text(x, y, buf, color, 3);
+    (void)n;
+}
+
+/* Horizontal battery-style bar. */
+static void draw_bar(int x, int y, int w, int h, unsigned pct, uint16_t fill)
+{
+    fill_rect(x, y, w, h, 0x2126);
+    int inner = (int)((uint32_t)w * pct / 100);
+    if (inner > 0) fill_rect(x + 1, y + 1, inner - 2, h - 2, fill);
+}
+
+static const char *state_name(pb_system_state_t st)
+{
+    switch (st) {
+    case PB_STATE_OFF: return "OFF";
+    case PB_STATE_READY: return "READY";
+    case PB_STATE_RUN: return "RUN";
+    case PB_STATE_FAULT: return "FAULT";
+    case PB_STATE_CHARGING: return "CHRG";
+    default: return "--";
+    }
+}
+
 esp_err_t pb_display_init(void)
 {
     s_frame = heap_caps_calloc(LCD_PIXELS, sizeof(uint16_t), MALLOC_CAP_DMA | MALLOC_CAP_INTERNAL);
@@ -169,7 +196,8 @@ esp_err_t pb_display_init(void)
 
 void pb_display_update(const pb_pack_sample_t *a, const pb_pack_sample_t *b,
                        unsigned energy_a_mwh, unsigned energy_b_mwh,
-                       bool wifi_connected, bool espnow_ready)
+                       bool wifi_connected, bool espnow_ready,
+                       const pb_output_state_t *outs, int screen_index)
 {
     if (!s_panel || !s_frame) return;
     for (unsigned i = 0; i < LCD_PIXELS; i++) s_frame[i] = COLOR_BG;
@@ -178,22 +206,92 @@ void pb_display_update(const pb_pack_sample_t *a, const pb_pack_sample_t *b,
     snprintf(header, sizeof(header), "PB64 NODE %u", CONFIG_PB_NODE_ID);
     draw_text(5, 4, header, COLOR_CYAN, 1);
     fill_rect(5, 25, 118, 1, 0x5ACB);
-    draw_value_line(34, 'A', a);
-    draw_value_line(52, 'B', b);
-    fill_rect(5, 68, 118, 1, 0x5ACB);
 
-    char line[24];
-    snprintf(line, sizeof(line), "E %lu/%luWh",
-             (unsigned long)(energy_a_mwh / 1000),
-             (unsigned long)(energy_b_mwh / 1000));
-    draw_text(5, 76, line, COLOR_GREEN, 1);
-    draw_text(5, 95, wifi_connected ? "WIFI UP" : "WIFI NO",
-              wifi_connected ? COLOR_GREEN : COLOR_AMBER, 1);
-    draw_text(66, 95, espnow_ready ? "NOW ON" : "NOW OFF",
-              espnow_ready ? COLOR_GREEN : COLOR_AMBER, 1);
-    draw_text(5, 114, "OUT 12/24/USB OFF", COLOR_RED, 1);
+    if (screen_index == 0) {
+        /* Screen 1 — Main: big SoC, V/A/W, output dots */
+        unsigned soc = 0;
+        if (a && a->bus_valid) soc += (unsigned)((a->bus_mv - 3200) * 100 / 1000);
+        if (b && b->bus_valid) soc += (unsigned)((b->bus_mv - 3200) * 100 / 1000);
+        if (soc > 100) soc = 100;
+        draw_soc_big(20, 32, soc, COLOR_GREEN);
+        char line[24];
+        int32_t total_ma = (a && a->current_valid ? a->current_ma : 0) +
+                           (b && b->current_valid ? b->current_ma : 0);
+        uint32_t bus_mv = a && a->bus_valid ? a->bus_mv : (b && b->bus_valid ? b->bus_mv : 0);
+        if (bus_mv) {
+            snprintf(line, sizeof(line), "%lu.%02luV %ldmA",
+                     (unsigned long)(bus_mv / 1000),
+                     (unsigned long)((bus_mv % 1000) / 10),
+                     (long)total_ma);
+            draw_text(5, 70, line, COLOR_WHITE, 1);
+        }
+        snprintf(line, sizeof(line), "E %lu/%luWh",
+                 (unsigned long)(energy_a_mwh / 1000),
+                 (unsigned long)(energy_b_mwh / 1000));
+        draw_text(5, 84, line, COLOR_GREEN, 1);
+        if (outs) {
+            draw_text(5, 100, state_name(outs->state),
+                      outs->state == PB_STATE_RUN ? COLOR_GREEN :
+                      outs->state == PB_STATE_CHARGING ? COLOR_AMBER : COLOR_WHITE, 1);
+            int dots[PB_OUT_COUNT] = {0, 0, 0};
+            for (int i = 0; i < PB_OUT_COUNT; i++) dots[i] = outs->out_on[i] ? 1 : 0;
+            int x = 5;
+            for (int i = 0; i < PB_OUT_COUNT; i++) {
+                fill_rect(x, 114, 8, 8, dots[i] ? COLOR_GREEN : 0x2126);
+                x += 16;
+            }
+        }
+    } else if (screen_index == 1) {
+        /* Screen 2 — Per-block detail */
+        draw_text(5, 30, "BLOCK A", COLOR_CYAN, 1);
+        draw_value_line(44, 'A', a);
+        draw_text(5, 74, "BLOCK B", COLOR_CYAN, 1);
+        draw_value_line(88, 'B', b);
+        if (a && a->bus_valid) {
+            unsigned soc = (unsigned)((a->bus_mv - 3200) * 100 / 1000);
+            draw_bar(5, 110, 118, 8, soc, COLOR_GREEN);
+        }
+    } else if (screen_index == 2) {
+        /* Screen 3 — Power meter */
+        draw_text(5, 30, "POWER METER", COLOR_CYAN, 1);
+        int32_t total_ma = (a && a->current_valid ? a->current_ma : 0) +
+                           (b && b->current_valid ? b->current_ma : 0);
+        uint32_t bus_mv = a && a->bus_valid ? a->bus_mv : (b && b->bus_valid ? b->bus_mv : 0);
+        if (bus_mv) {
+            uint32_t mw = (uint32_t)bus_mv * (uint32_t)(total_ma < 0 ? -total_ma : total_ma) / 1000;
+            char line[24];
+            snprintf(line, sizeof(line), "%ld mA", (long)total_ma);
+            draw_text(5, 56, line, COLOR_WHITE, 1);
+            snprintf(line, sizeof(line), "%lu W", (unsigned long)mw);
+            draw_text(5, 74, line, COLOR_AMBER, 1);
+        }
+        snprintf(line, sizeof(line), "Wh A %lu  B %lu",
+                 (unsigned long)(energy_a_mwh / 1000),
+                 (unsigned long)(energy_b_mwh / 1000));
+        draw_text(5, 98, line, COLOR_WHITE, 1);
+        draw_text(5, 114, "hold OK to reset", COLOR_RED, 1);
+    } else {
+        /* Screen 4 — Settings / state */
+        draw_text(5, 30, "SETTINGS", COLOR_CYAN, 1);
+        if (outs) {
+            char line[24];
+            snprintf(line, sizeof(line), "state %s", state_name(outs->state));
+            draw_text(5, 52, line, COLOR_WHITE, 1);
+            snprintf(line, sizeof(line), "chg %s chrg %s",
+                     outs->charger_present ? "Y" : "N",
+                     outs->charging ? "Y" : "N");
+            draw_text(5, 68, line, COLOR_WHITE, 1);
+        }
+        snprintf(line, sizeof(line), "12V %s 24V %s USB %s",
+                 outs && outs->out_on[PB_OUT_12V] ? "ON" : "off",
+                 outs && outs->out_on[PB_OUT_24V] ? "ON" : "off",
+                 outs && outs->out_on[PB_OUT_USB] ? "ON" : "off");
+        draw_text(5, 88, line, COLOR_WHITE, 1);
+        draw_text(5, 114, "hold LEFT=home", COLOR_RED, 1);
+    }
 
-    /* esp_lcd consumes RGB565 bytes in big-endian wire order. */
+    draw_text(5, 126, "<  >  OK", COLOR_CYAN, 1);
+
     for (unsigned i = 0; i < LCD_PIXELS; i++) s_frame[i] = __builtin_bswap16(s_frame[i]);
     esp_err_t err = esp_lcd_panel_draw_bitmap(s_panel, 0, 0, LCD_WIDTH, LCD_HEIGHT, s_frame);
     if (err != ESP_OK) ESP_LOGW(TAG, "LCD refresh failed: %s", esp_err_to_name(err));

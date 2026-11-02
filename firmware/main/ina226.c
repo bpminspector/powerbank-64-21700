@@ -40,9 +40,16 @@ esp_err_t pb_ina226_bus_init(void)
     return i2c_new_master_bus(&config, &s_bus);
 }
 
-esp_err_t pb_ina226_open(pb_ina226_t *sensor, uint8_t address, uint32_t shunt_uohm)
+i2c_master_bus_handle_t pb_ina226_bus_handle(void)
+{
+    return s_bus;
+}
+
+esp_err_t pb_ina226_open(pb_ina226_t *sensor, uint8_t address,
+                         uint32_t shunt_uohm, int current_sign)
 {
     if (!sensor || !s_bus) return ESP_ERR_INVALID_STATE;
+    if (current_sign != -1 && current_sign != 1) return ESP_ERR_INVALID_ARG;
     const i2c_device_config_t config = {
         .dev_addr_length = I2C_ADDR_BIT_LEN_7,
         .device_address = address,
@@ -51,6 +58,7 @@ esp_err_t pb_ina226_open(pb_ina226_t *sensor, uint8_t address, uint32_t shunt_uo
     esp_err_t err = i2c_master_bus_add_device(s_bus, &config, &sensor->dev);
     if (err != ESP_OK) return err;
     sensor->shunt_uohm = shunt_uohm;
+    sensor->current_sign = current_sign;
     err = write_reg(sensor->dev, INA226_REG_CONFIG, INA226_CONFIG_CONTINUOUS);
     if (err != ESP_OK) {
         i2c_master_bus_rm_device(sensor->dev);
@@ -58,8 +66,9 @@ esp_err_t pb_ina226_open(pb_ina226_t *sensor, uint8_t address, uint32_t shunt_uo
         return err;
     }
     sensor->ready = true;
-    ESP_LOGI(TAG, "INA226 at 0x%02x ready; shunt=%lu uOhm%s", address,
-             (unsigned long)shunt_uohm, shunt_uohm ? "" : " (current disabled)");
+    ESP_LOGI(TAG, "INA226 at 0x%02x ready; shunt=%lu uOhm, current sign=%d%s",
+             address, (unsigned long)shunt_uohm, current_sign,
+             shunt_uohm ? "" : " (current/power disabled)");
     return ESP_OK;
 }
 
@@ -72,13 +81,18 @@ esp_err_t pb_ina226_read(pb_ina226_t *sensor, pb_pack_sample_t *sample)
     err = read_reg(sensor->dev, INA226_REG_SHUNT_VOLT, &raw_shunt);
     if (err != ESP_OK) return err;
 
-    sample->bus_mv = ((uint32_t)raw_bus * 5U) / 4U; /* 1.25 mV/LSB */
+    sample->bus_mv = ((uint32_t)raw_bus * 5U) / 4U;
     sample->bus_valid = true;
     sample->current_valid = sensor->shunt_uohm != 0;
+    sample->power_valid = sample->current_valid;
     sample->current_ma = 0;
+    sample->power_mw = 0;
+    sample->shunt_uv = (int32_t)(int16_t)raw_shunt * 5 / 2;
     if (sample->current_valid) {
-        int32_t shunt_uv = (int16_t)raw_shunt * 5 / 2; /* 2.5 uV/LSB */
-        sample->current_ma = (int32_t)(((int64_t)shunt_uv * 1000) / sensor->shunt_uohm);
+        sample->current_ma = (int32_t)(((int64_t)sample->shunt_uv * 1000 *
+                                        sensor->current_sign) / sensor->shunt_uohm);
+        sample->power_mw = (int32_t)(((int64_t)sample->bus_mv *
+                                      sample->current_ma) / 1000);
     }
     return ESP_OK;
 }
